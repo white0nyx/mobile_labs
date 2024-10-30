@@ -2,11 +2,6 @@ package com.example.dstu_4_2
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import com.example.dstu_4_2.Admin
-import com.example.dstu_4_2.Director
-import com.example.dstu_4_2.Engineer
-import com.example.dstu_4_2.Employee
-import com.example.dstu_4_2.Manager
 
 class MainActivity : AppCompatActivity() {
 
@@ -15,23 +10,35 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         // Создание объектов классов и их заполнение
-        val eng = Engineer(101, "Евгений Селезнёв", "012-34-5678", 120_345.27)
-        val mgr = Manager(207, "Юлия Денисова", "054-12-2367", 109_501.36, "Международный отдел")
-        val adm = Admin(304, "Борис Мигалов", "108-23-2367", 75_002.34)
-        val dir = Director(12, "Александр Весловскиий", "099-45-2340", 120_567.36, "Российский отдел", 1_000_000.00)
+        val tv = Electronics(101, "Телевизор Samsung", 49999.99, 24)
+        val shirt = Clothing(202, "Рубашка мужская", 1999.99, "L", "Хлопок")
+        val apple = Food(303, "Яблоко", 29.99, "2024-01-01")
+        val chair = Furniture(404, "Стул деревянный", 3499.99, "Дерево", "45x45x90 см")
 
         // Отображение данных объектов
-        printEmployee(eng)
-        printEmployee(mgr)
-        printEmployee(adm)
-        printEmployee(dir)
+        printProduct(tv)
+        printProduct(shirt)
+        printProduct(apple)
+        printProduct(chair)
     }
 
-    // Метод отображения данных объекта Employee
-    private fun printEmployee(emp: Employee) {
-        println("Employee ID: ${emp.getEmpId()}")
-        println("Employee Name: ${emp.getName()}")
-        println("Employee Soc Sec #: ${emp.getSsn()}")
-        println("Employee Salary: ${emp.getSalary()}")
+    // Метод отображения данных объекта Product
+    private fun printProduct(product: Product) {
+        println("Product ID: ${product.getProductId()}")
+        println("Product Name: ${product.getName()}")
+        println("Product Price: ${product.getPrice()}")
+        when (product) {
+            is Electronics -> println("Warranty Period: ${product.getWarrantyPeriod()} months")
+            is Clothing -> {
+                println("Size: ${product.getSize()}")
+                println("Material: ${product.getMaterial()}")
+            }
+            is Food -> println("Expiration Date: ${product.getExpirationDate()}")
+            is Furniture -> {
+                println("Material: ${product.getMaterial()}")
+                println("Dimensions: ${product.getDimensions()}")
+            }
+        }
+        println("--------------------------------------------------")
     }
 }
