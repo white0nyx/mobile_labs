@@ -17,27 +17,34 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // Обработка нажатия на кнопку
-        binding.button.setOnClickListener {
-            handleButtonClick()
+        // Добавляем обработчик для кнопки "Рассчитать стоимость"
+        binding.buttonCalculate.setOnClickListener {
+            calculateFare()
         }
+    }
 
-        // Обработка нажатия на чекбокс
-        binding.checkBox.setOnCheckedChangeListener { _, isChecked ->
-            if (isChecked) {
-                Toast.makeText(this, "Чекбокс выбран", Toast.LENGTH_SHORT).show()
-            } else {
-                Toast.makeText(this, "Чекбокс снят", Toast.LENGTH_SHORT).show()
-            }
-        }
+    // Функция расчета стоимости проезда
+    private fun calculateFare() {
+        val distanceText = binding.editTextDistance.text.toString()
+        val timeText = binding.editTextTime.text.toString()
 
-        // Обработка нажатия на переключатель
-        binding.switchButton.setOnCheckedChangeListener { _, isChecked ->
-            if (isChecked) {
-                Toast.makeText(this, "Переключатель включен", Toast.LENGTH_SHORT).show()
+        if (distanceText.isNotEmpty() && timeText.isNotEmpty()) {
+            val distance = distanceText.toDoubleOrNull()
+            val time = timeText.toDoubleOrNull()
+
+            if (distance != null && time != null) {
+                val costBase = 50.0
+                val costPerKm = 10.0
+                val costPerMinute = 2.0
+
+                val totalCost = costBase + (distance * costPerKm) + (time * costPerMinute)
+
+                binding.textViewResult.text = "Стоимость: $totalCost руб."
             } else {
-                Toast.makeText(this, "Переключатель выключен", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Введите корректные значения!", Toast.LENGTH_SHORT).show()
             }
+        } else {
+            Toast.makeText(this, "Заполните все поля!", Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -54,9 +61,5 @@ class MainActivity : AppCompatActivity() {
             }
             else -> super.onOptionsItemSelected(item)
         }
-    }
-
-    private fun handleButtonClick() {
-        Toast.makeText(this, "Button clicked!", Toast.LENGTH_SHORT).show()
     }
 }
