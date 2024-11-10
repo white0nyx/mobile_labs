@@ -67,4 +67,5 @@ class AddParticipantActivity : AppCompatActivity() {
         }
         db.insert(DatabaseHelper.TABLE_PARTICIPANTS, null, values)
     }
+
 }

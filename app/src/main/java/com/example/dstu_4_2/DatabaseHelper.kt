@@ -39,7 +39,7 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
     fun getAllParticipants(): List<Participant> {
         val participants = mutableListOf<Participant>()
         val db = readableDatabase
-        val query = "SELECT * FROM $TABLE_PARTICIPANTS INNER JOIN $TABLE_SPORTS ON $TABLE_PARTICIPANTS.$COLUMN_SPORT_ID = $TABLE_SPORTS.$COLUMN_ID"
+        val query = "SELECT * FROM $TABLE_PARTICIPANTS"
         val cursor = db.rawQuery(query, null)
 
         if (cursor.moveToFirst()) {
