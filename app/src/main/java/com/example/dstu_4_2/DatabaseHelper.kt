@@ -68,6 +68,11 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
         return sports
     }
 
+    fun deleteSport(id: Int) {
+        val db = writableDatabase
+        db.delete(TABLE_SPORTS, "$COLUMN_ID=?", arrayOf(id.toString()))
+    }
+
     companion object {
         private const val DATABASE_NAME = "sports_competition.db"
         private const val DATABASE_VERSION = 2

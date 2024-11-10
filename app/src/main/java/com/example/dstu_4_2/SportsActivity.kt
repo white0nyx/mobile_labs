@@ -11,6 +11,20 @@ import com.example.dstu_4_2.adapters.SportAdapter
 
 class SportsActivity : AppCompatActivity() {
 
+    private fun deleteSport(sport: Sport) {
+        val builder = android.app.AlertDialog.Builder(this)
+        builder.setTitle("Удаление вида спорта")
+        builder.setMessage("Вы уверены, что хотите удалить этот вид спорта?")
+        builder.setPositiveButton("Да") { _, _ ->
+            databaseHelper.deleteSport(sport.id)
+            loadSports()
+        }
+        builder.setNegativeButton("Нет") { dialog, _ ->
+            dialog.dismiss()
+        }
+        builder.show()
+    }
+
     private val sportAddedReceiver = object : android.content.BroadcastReceiver() {
         override fun onReceive(context: android.content.Context?, intent: android.content.Intent?) {
             loadSports()
@@ -45,7 +59,9 @@ class SportsActivity : AppCompatActivity() {
 
     private fun setupRecyclerView() {
         binding.recyclerView.layoutManager = LinearLayoutManager(this)
-        sportAdapter = SportAdapter(mutableListOf())
+        sportAdapter = SportAdapter(mutableListOf()) { sport ->
+            deleteSport(sport)
+        }
         binding.recyclerView.adapter = sportAdapter
     }
 

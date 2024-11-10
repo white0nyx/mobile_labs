@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.dstu_4_2.R
 import com.example.dstu_4_2.models.Sport
 
-class SportAdapter(private var sports: MutableList<Sport>) :
+class SportAdapter(private var sports: MutableList<Sport>, private val onDeleteClick: (Sport) -> Unit) :
     RecyclerView.Adapter<SportAdapter.SportViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SportViewHolder {
@@ -20,6 +20,9 @@ class SportAdapter(private var sports: MutableList<Sport>) :
     override fun onBindViewHolder(holder: SportViewHolder, position: Int) {
         val sport = sports[position]
         holder.nameTextView.text = sport.name
+        holder.deleteButton.setOnClickListener {
+            onDeleteClick(sport)
+        }
     }
 
     override fun getItemCount(): Int = sports.size
@@ -32,5 +35,6 @@ class SportAdapter(private var sports: MutableList<Sport>) :
 
     inner class SportViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val nameTextView: TextView = itemView.findViewById(R.id.nameTextView)
+        val deleteButton: View = itemView.findViewById(R.id.deleteButton)
     }
 }
