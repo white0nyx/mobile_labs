@@ -1,5 +1,6 @@
 package com.example.dstu_4_2.db
 
+import android.content.ContentValues
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
@@ -14,7 +15,8 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
                 $COLUMN_ID INTEGER PRIMARY KEY AUTOINCREMENT,
                 $COLUMN_NAME TEXT,
                 $COLUMN_AGE INTEGER,
-                $COLUMN_SPORT TEXT
+                $COLUMN_SPORT_ID INTEGER,
+                FOREIGN KEY ($COLUMN_SPORT_ID) REFERENCES $TABLE_SPORTS($COLUMN_ID)
             )
         """
         db.execSQL(createParticipantTable)
@@ -37,15 +39,16 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
     fun getAllParticipants(): List<Participant> {
         val participants = mutableListOf<Participant>()
         val db = readableDatabase
-        val cursor = db.query(TABLE_PARTICIPANTS, null, null, null, null, null, null)
+        val query = "SELECT * FROM $TABLE_PARTICIPANTS INNER JOIN $TABLE_SPORTS ON $TABLE_PARTICIPANTS.$COLUMN_SPORT_ID = $TABLE_SPORTS.$COLUMN_ID"
+        val cursor = db.rawQuery(query, null)
 
         if (cursor.moveToFirst()) {
             do {
                 val id = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_ID))
                 val name = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_NAME))
                 val age = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_AGE))
-                val sport = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_SPORT))
-                participants.add(Participant(id, name, age, sport))
+                val sportId = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_SPORT_ID))
+                participants.add(Participant(id, name, age, sportId))
             } while (cursor.moveToNext())
         }
         cursor.close()
@@ -68,6 +71,28 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
         return sports
     }
 
+    fun getSportById(sportId: Int): Sport? {
+        val db = readableDatabase
+        val cursor = db.query(
+            TABLE_SPORTS,
+            null,
+            "$COLUMN_ID=?",
+            arrayOf(sportId.toString()),
+            null,
+            null,
+            null
+        )
+
+        var sport: Sport? = null
+        if (cursor.moveToFirst()) {
+            val id = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_ID))
+            val name = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_NAME))
+            sport = Sport(id, name)
+        }
+        cursor.close()
+        return sport
+    }
+
     fun deleteSport(id: Int) {
         val db = writableDatabase
         db.delete(TABLE_SPORTS, "$COLUMN_ID=?", arrayOf(id.toString()))
@@ -78,15 +103,25 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
         db.delete(TABLE_PARTICIPANTS, "$COLUMN_ID=?", arrayOf(id.toString()))
     }
 
+    fun addParticipant(participant: Participant) {
+        val db = writableDatabase
+        val values = ContentValues().apply {
+            put(COLUMN_NAME, participant.name)
+            put(COLUMN_AGE, participant.age)
+            put(COLUMN_SPORT_ID, participant.sportId)
+        }
+        db.insert(TABLE_PARTICIPANTS, null, values)
+    }
+
     companion object {
         private const val DATABASE_NAME = "sports_competition.db"
-        private const val DATABASE_VERSION = 2
+        private const val DATABASE_VERSION = 3
 
         const val TABLE_PARTICIPANTS = "participants"
         const val TABLE_SPORTS = "sports"
         const val COLUMN_ID = "id"
         const val COLUMN_NAME = "name"
         const val COLUMN_AGE = "age"
-        const val COLUMN_SPORT = "sport"
+        const val COLUMN_SPORT_ID = "sport_id"
     }
 }

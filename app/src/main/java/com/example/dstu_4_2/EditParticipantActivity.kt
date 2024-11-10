@@ -29,12 +29,12 @@ class EditParticipantActivity : AppCompatActivity() {
         participantId = intent.getIntExtra("PARTICIPANT_ID", 0)
         val participantName = intent.getStringExtra("PARTICIPANT_NAME")
         val participantAge = intent.getIntExtra("PARTICIPANT_AGE", 0)
-        val participantSport = intent.getStringExtra("PARTICIPANT_SPORT")
+        val participantSportId = intent.getIntExtra("PARTICIPANT_SPORT_ID", 0)
 
         // Устанавливаем данные в поля
         binding.participantNameEditText.setText(participantName)
         binding.participantAgeEditText.setText(participantAge.toString())
-        setupSportSpinner(participantSport)
+        setupSportSpinner(participantSportId)
 
         binding.saveButton.setOnClickListener {
             val updatedName = binding.participantNameEditText.text.toString()
@@ -43,7 +43,7 @@ class EditParticipantActivity : AppCompatActivity() {
 
             if (updatedName.isNotEmpty() && updatedAge != null && selectedSportPosition != -1) {
                 val selectedSport = sports[selectedSportPosition]
-                updateParticipantInDatabase(updatedName, updatedAge, selectedSport.name)
+                updateParticipantInDatabase(updatedName, updatedAge, selectedSport.id)
                 Toast.makeText(this, "Участник обновлен", Toast.LENGTH_SHORT).show()
                 val intent = Intent().apply {
                     action = "com.example.dstu_4_2.PARTICIPANT_UPDATED"
@@ -60,25 +60,25 @@ class EditParticipantActivity : AppCompatActivity() {
         }
     }
 
-    private fun setupSportSpinner(selectedSportName: String?) {
+    private fun setupSportSpinner(selectedSportId: Int) {
         val sportNames = sports.map { it.name }
         val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, sportNames)
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         binding.participantSportSpinner.adapter = adapter
 
         // Устанавливаем выбранный вид спорта
-        val selectedPosition = sportNames.indexOf(selectedSportName)
+        val selectedPosition = sports.indexOfFirst { it.id == selectedSportId }
         if (selectedPosition != -1) {
             binding.participantSportSpinner.setSelection(selectedPosition)
         }
     }
 
-    private fun updateParticipantInDatabase(updatedName: String, updatedAge: Int, updatedSport: String) {
+    private fun updateParticipantInDatabase(updatedName: String, updatedAge: Int, updatedSportId: Int) {
         val db = databaseHelper.writableDatabase
         val values = android.content.ContentValues().apply {
             put(DatabaseHelper.COLUMN_NAME, updatedName)
             put(DatabaseHelper.COLUMN_AGE, updatedAge)
-            put(DatabaseHelper.COLUMN_SPORT, updatedSport)
+            put(DatabaseHelper.COLUMN_SPORT_ID, updatedSportId)
         }
         db.update(DatabaseHelper.TABLE_PARTICIPANTS, values, "${DatabaseHelper.COLUMN_ID}=?", arrayOf(participantId.toString()))
     }

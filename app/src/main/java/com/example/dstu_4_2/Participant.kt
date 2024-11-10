@@ -4,5 +4,5 @@ data class Participant(
     val id: Int,
     val name: String,
     val age: Int,
-    val sport: String
+    val sportId: Int
 )

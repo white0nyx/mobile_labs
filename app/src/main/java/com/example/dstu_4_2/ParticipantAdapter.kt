@@ -8,6 +8,7 @@ import android.widget.Button
 import androidx.recyclerview.widget.RecyclerView
 import com.example.dstu_4_2.R
 import com.example.dstu_4_2.models.Participant
+import com.example.dstu_4_2.db.DatabaseHelper
 
 class ParticipantAdapter(
     private var participants: MutableList<Participant>,
@@ -25,7 +26,7 @@ class ParticipantAdapter(
         val participant = participants[position]
         holder.nameTextView.text = participant.name
         holder.ageTextView.text = "Возраст: ${participant.age}"
-        holder.sportTextView.text = "Вид спорта: ${participant.sport}"
+        holder.sportTextView.text = "Вид спорта: ${holder.getSportNameById(participant.sportId)}"
 
         holder.editButton.setOnClickListener {
             onEditClick(participant)
@@ -49,5 +50,11 @@ class ParticipantAdapter(
         val sportTextView: TextView = itemView.findViewById(R.id.sportTextView)
         val editButton: Button = itemView.findViewById(R.id.editButton)
         val deleteButton: Button = itemView.findViewById(R.id.deleteButton)
+
+        fun getSportNameById(sportId: Int): String {
+            val dbHelper = DatabaseHelper(itemView.context)
+            val sport = dbHelper.getSportById(sportId)
+            return sport?.name ?: "Неизвестный вид спорта"
+        }
     }
 }

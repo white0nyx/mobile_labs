@@ -33,7 +33,7 @@ class AddParticipantActivity : AppCompatActivity() {
 
             if (participantName.isNotEmpty() && participantAge != null && selectedSportPosition != -1) {
                 val selectedSport = sports[selectedSportPosition]
-                val participant = Participant(0, participantName, participantAge, selectedSport.name)
+                val participant = Participant(0, participantName, participantAge, selectedSport.id)
                 addParticipantToDatabase(participant)
                 Toast.makeText(this, "Участник добавлен", Toast.LENGTH_SHORT).show()
                 val intent = Intent().apply {
@@ -63,7 +63,7 @@ class AddParticipantActivity : AppCompatActivity() {
         val values = android.content.ContentValues().apply {
             put(DatabaseHelper.COLUMN_NAME, participant.name)
             put(DatabaseHelper.COLUMN_AGE, participant.age)
-            put(DatabaseHelper.COLUMN_SPORT, participant.sport)
+            put(DatabaseHelper.COLUMN_SPORT_ID, participant.sportId)
         }
         db.insert(DatabaseHelper.TABLE_PARTICIPANTS, null, values)
     }

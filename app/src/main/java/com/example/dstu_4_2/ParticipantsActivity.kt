@@ -30,7 +30,7 @@ class ParticipantsActivity : AppCompatActivity() {
         intent.putExtra("PARTICIPANT_ID", participant.id)
         intent.putExtra("PARTICIPANT_NAME", participant.name)
         intent.putExtra("PARTICIPANT_AGE", participant.age)
-        intent.putExtra("PARTICIPANT_SPORT", participant.sport)
+        intent.putExtra("PARTICIPANT_SPORT_ID", participant.sportId)
         startActivity(intent)
     }
 
