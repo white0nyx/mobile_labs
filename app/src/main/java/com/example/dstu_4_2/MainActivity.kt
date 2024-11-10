@@ -6,10 +6,14 @@ import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
 import com.example.dstu_4_2.databinding.ActivityMainBinding
+import java.io.File
+import java.io.FileOutputStream
+import java.io.FileInputStream
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
+    private val fileName = "fare_history.txt"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -20,6 +24,11 @@ class MainActivity : AppCompatActivity() {
         // Добавляем обработчик для кнопки "Рассчитать стоимость"
         binding.buttonCalculate.setOnClickListener {
             calculateFare()
+        }
+
+        // Добавляем обработчик для кнопки "История заказов"
+        binding.buttonShowHistory.setOnClickListener {
+            showHistory()
         }
     }
 
@@ -38,8 +47,10 @@ class MainActivity : AppCompatActivity() {
                 val costPerMinute = 2.0
 
                 val totalCost = costBase + (distance * costPerKm) + (time * costPerMinute)
+                val resultText = "Стоимость: $totalCost руб."
 
-                binding.textViewResult.text = "Стоимость: $totalCost руб."
+                binding.textViewResult.text = resultText
+                saveToHistory(resultText)
             } else {
                 Toast.makeText(this, "Введите корректные значения!", Toast.LENGTH_SHORT).show()
             }
@@ -48,18 +59,28 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        menuInflater.inflate(R.menu.menu_main, menu)
-        return true
+    // Сохранение результата в файл
+    private fun saveToHistory(result: String) {
+        try {
+            val fileOutputStream: FileOutputStream = openFileOutput(fileName, MODE_APPEND)
+            fileOutputStream.write((result + "\n").toByteArray())
+            fileOutputStream.close()
+        } catch (e: Exception) {
+            e.printStackTrace()
+            Toast.makeText(this, "Ошибка сохранения в файл!", Toast.LENGTH_SHORT).show()
+        }
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId) {
-            R.id.action_settings -> {
-                Toast.makeText(this, "Settings clicked", Toast.LENGTH_SHORT).show()
-                true
-            }
-            else -> super.onOptionsItemSelected(item)
+    // Показать историю расчетов
+    private fun showHistory() {
+        try {
+            val fileInputStream: FileInputStream = openFileInput(fileName)
+            val history = fileInputStream.bufferedReader().use { it.readText() }
+            fileInputStream.close()
+            binding.textViewHistory.text = history
+        } catch (e: Exception) {
+            e.printStackTrace()
+            Toast.makeText(this, "Ошибка чтения из файла!", Toast.LENGTH_SHORT).show()
         }
     }
 }

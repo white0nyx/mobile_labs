@@ -36,6 +36,15 @@
             android:backgroundTint="@color/black"
             android:text="Рассчитать стоимость" />
 
+        <Button
+            android:id="@+id/buttonShowHistory"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="8dp"
+            android:backgroundTint="@color/black"
+            android:text="История заказов" />
+
         <TextView
             android:id="@+id/textViewResult"
             android:layout_width="wrap_content"
@@ -44,6 +53,15 @@
             android:layout_marginTop="16dp"
             android:text="Стоимость: "
             android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/textViewHistory"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="16dp"
+            android:text="История заказов: "
+            android:textSize="16sp" />
 
     </LinearLayout>
 
