@@ -37,6 +37,13 @@
 
         </activity>
 
+        <activity
+            android:name=".AddSportActivity"
+            android:exported="true"
+            android:theme="@style/Theme.DSTU_4_2">
+
+        </activity>
+
     </application>
 
 </manifest>
