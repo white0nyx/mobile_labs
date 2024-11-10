@@ -4,15 +4,39 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#CAC9C9"
+    android:background="#87CEEB"
     android:fitsSystemWindows="true"
     tools:context=".MainActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="16dp">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <!-- Sky View -->
+        <ImageView
+            android:id="@+id/skyImageView"
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:layout_weight="2"
+            android:src="@drawable/sky" />
+
+        <!-- Sun View -->
+        <!-- Sun View -->
+        <ImageView
+            android:id="@+id/sunImageView"
+            android:layout_width="180dp"
+            android:layout_height="180dp"
+            android:layout_gravity="center"
+            android:src="@drawable/sun_png" />
+
+        <!-- Grass View -->
+        <ImageView
+            android:id="@+id/grassImageView"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:src="@drawable/grass" />
 
     </LinearLayout>
 
