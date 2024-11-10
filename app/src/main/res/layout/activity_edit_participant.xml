@@ -19,11 +19,11 @@
         android:hint="Возраст участника"
         android:inputType="number" />
 
-    <EditText
-        android:id="@+id/participantSportEditText"
+    <Spinner
+        android:id="@+id/participantSportSpinner"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Вид спорта" />
+        android:layout_marginTop="8dp" />
 
     <Button
         android:id="@+id/saveButton"
