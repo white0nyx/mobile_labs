@@ -13,7 +13,6 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <!-- Sky View -->
         <ImageView
             android:id="@+id/skyImageView"
             android:layout_width="match_parent"
@@ -21,8 +20,6 @@
             android:layout_weight="2"
             android:src="@drawable/sky" />
 
-        <!-- Sun View -->
-        <!-- Sun View -->
         <ImageView
             android:id="@+id/sunImageView"
             android:layout_width="180dp"
@@ -30,7 +27,6 @@
             android:layout_gravity="center"
             android:src="@drawable/sun_png" />
 
-        <!-- Grass View -->
         <ImageView
             android:id="@+id/grassImageView"
             android:layout_width="match_parent"

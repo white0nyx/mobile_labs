@@ -11,7 +11,6 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        // Load animation for the sun
         val sunImageView: ImageView = findViewById(R.id.sunImageView)
         val sunAnimation = AnimationUtils.loadAnimation(this, R.anim.sunrise)
         sunImageView.startAnimation(sunAnimation)
