@@ -51,6 +51,20 @@
 
         </activity>
 
+        <activity
+            android:name=".AddParticipantActivity"
+            android:exported="true"
+            android:theme="@style/Theme.DSTU_4_2">
+
+        </activity>
+
+        <activity
+            android:name=".EditParticipantActivity"
+            android:exported="true"
+            android:theme="@style/Theme.DSTU_4_2">
+
+        </activity>
+
     </application>
 
 </manifest>

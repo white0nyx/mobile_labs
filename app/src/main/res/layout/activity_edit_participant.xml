@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:background="#CAC9C9">
+
+    <EditText
+        android:id="@+id/participantNameEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Имя участника" />
+
+    <EditText
+        android:id="@+id/participantAgeEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Возраст участника"
+        android:inputType="number" />
+
+    <EditText
+        android:id="@+id/participantSportEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Вид спорта" />
+
+    <Button
+        android:id="@+id/saveButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Сохранить"
+        android:layout_marginTop="16dp" />
+
+    <Button
+        android:id="@+id/cancelButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Отмена"
+        android:layout_marginTop="8dp" />
+
+</LinearLayout>
