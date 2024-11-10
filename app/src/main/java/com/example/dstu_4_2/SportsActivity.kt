@@ -25,7 +25,14 @@ class SportsActivity : AppCompatActivity() {
         builder.show()
     }
 
-    private val sportAddedReceiver = object : android.content.BroadcastReceiver() {
+    private fun editSport(sport: Sport) {
+        val intent = Intent(this, EditSportActivity::class.java)
+        intent.putExtra("SPORT_ID", sport.id)
+        intent.putExtra("SPORT_NAME", sport.name)
+        startActivity(intent)
+    }
+
+    private val sportReceiver = object : android.content.BroadcastReceiver() {
         override fun onReceive(context: android.content.Context?, intent: android.content.Intent?) {
             loadSports()
         }
@@ -40,7 +47,10 @@ class SportsActivity : AppCompatActivity() {
         binding = ActivitySportsBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        registerReceiver(sportAddedReceiver, android.content.IntentFilter("com.example.dstu_4_2.SPORT_ADDED"))
+        registerReceiver(sportReceiver, android.content.IntentFilter().apply {
+            addAction("com.example.dstu_4_2.SPORT_ADDED")
+            addAction("com.example.dstu_4_2.SPORT_UPDATED")
+        })
 
         databaseHelper = DatabaseHelper(this)
 
@@ -59,14 +69,21 @@ class SportsActivity : AppCompatActivity() {
 
     private fun setupRecyclerView() {
         binding.recyclerView.layoutManager = LinearLayoutManager(this)
-        sportAdapter = SportAdapter(mutableListOf()) { sport ->
+        sportAdapter = SportAdapter(mutableListOf(), { sport ->
             deleteSport(sport)
-        }
+        }, { sport ->
+            editSport(sport)
+        })
         binding.recyclerView.adapter = sportAdapter
     }
 
     private fun loadSports() {
         val sports: List<Sport> = databaseHelper.getAllSports()
         sportAdapter.updateData(sports)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        unregisterReceiver(sportReceiver)
     }
 }
