@@ -2,16 +2,19 @@ package com.example.dstu_4_2
 
 import android.content.Intent
 import android.os.Bundle
+import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.dstu_4_2.databinding.ActivityAddParticipantBinding
 import com.example.dstu_4_2.db.DatabaseHelper
 import com.example.dstu_4_2.models.Participant
+import com.example.dstu_4_2.models.Sport
 
 class AddParticipantActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityAddParticipantBinding
     private lateinit var databaseHelper: DatabaseHelper
+    private lateinit var sports: List<Sport>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -19,14 +22,18 @@ class AddParticipantActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         databaseHelper = DatabaseHelper(this)
+        sports = databaseHelper.getAllSports()
+
+        setupSportSpinner()
 
         binding.saveButton.setOnClickListener {
             val participantName = binding.participantNameEditText.text.toString()
             val participantAge = binding.participantAgeEditText.text.toString().toIntOrNull()
-            val participantSport = binding.participantSportEditText.text.toString()
+            val selectedSportPosition = binding.participantSportSpinner.selectedItemPosition
 
-            if (participantName.isNotEmpty() && participantAge != null && participantSport.isNotEmpty()) {
-                val participant = Participant(0, participantName, participantAge, participantSport)
+            if (participantName.isNotEmpty() && participantAge != null && selectedSportPosition != -1) {
+                val selectedSport = sports[selectedSportPosition]
+                val participant = Participant(0, participantName, participantAge, selectedSport.name)
                 addParticipantToDatabase(participant)
                 Toast.makeText(this, "Участник добавлен", Toast.LENGTH_SHORT).show()
                 val intent = Intent().apply {
@@ -42,6 +49,13 @@ class AddParticipantActivity : AppCompatActivity() {
         binding.cancelButton.setOnClickListener {
             finish()
         }
+    }
+
+    private fun setupSportSpinner() {
+        val sportNames = sports.map { it.name }
+        val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, sportNames)
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        binding.participantSportSpinner.adapter = adapter
     }
 
     private fun addParticipantToDatabase(participant: Participant) {
